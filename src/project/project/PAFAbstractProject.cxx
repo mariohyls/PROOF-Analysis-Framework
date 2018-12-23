@@ -258,10 +258,8 @@ void CreateSessionDir()
 	gSystem->mkdir(buildDir, true);
 	gSystem->SetBuildDir(buildDir);
 
-	PAF_DEBUG("PAFAbstractProject", "Creating txt file");
 
 	TFile file(buildDir+"/ShouldWeCompile.conf", "NEW");
-	//file = TFile::Open(buildDir+"/ShouldWeCompile.conf"); 
 	file.Write("Delete this file if you want PAF to compile / recompile all \
 	the Packages in this folder");
 }
@@ -275,12 +273,8 @@ void PAFAbstractProject::PreparePackage(PAFPackage* package)
 	}
 	else
 	{
-		//package->CompileAsLibrary();
-		PAF_DEBUG("PAFAbstractProject", "Adding libraries");
-	//PAF_DEBUG("PAFPackage", "A");
+		package->CompileAsLibrary();
 		fLibraries->push_back(new PAFLibrary(fPAFSettings, package->GetLibraryFileName()));
-	//PAF_DEBUG("PAFPackage", "B");
-
 	}
 }
 
@@ -288,8 +282,10 @@ bool PAFAbstractProject::CheckPackages()
 {
 	TString buildDir = TString::Format("%s/.paf/BuildDir",gSystem->pwd());
 	bool ShouldWeCompile = !gSystem->AccessPathName(buildDir+"/ShouldWeCompile.conf");
+
 	return ShouldWeCompile;
 }
+
 
 void PAFAbstractProject::PreparePackages()
 {
@@ -297,25 +293,23 @@ void PAFAbstractProject::PreparePackages()
 	
 	if (PackagesAreCompiled)
 	{
-
-		PAF_DEBUG("PAFAbstractProject", "The packages are already compiled.");
-
+		//CreateSessionDir();
 		TString buildDir = TString::Format("%s/.paf/BuildDir",gSystem->pwd());
 		gSystem->SetBuildDir(buildDir);
 
-		PAF_DEBUG("PAFAbstractProject", "COMPILING ALL THE PACKAGES");
-		CreateSessionDir();
+		PAF_DEBUG("PAFAbstractProject", "The packages are already compiled. Adding Libraries");
 
 		for(unsigned int i = 0; i < fPackages->size(); i++)
 		{
-			PreparePackage(fPackages->at(i));
+			fLibraries->push_back(new PAFLibrary(fPAFSettings, 
+							fPackages->at(i)->GetLibraryFileName()));
 		}
 
 		for(unsigned int i = 0; i < fSelectorPackages->size(); i++)
 		{
-			PreparePackage(fSelectorPackages->at(i));
+			fLibraries->push_back(new PAFLibrary(fPAFSettings, 
+							fSelectorPackages->at(i)->GetLibraryFileName()));
 		}
-
 	}
 	else
 	{
@@ -338,11 +332,7 @@ void PAFAbstractProject::LoadProjectItems()
 {
 	for(unsigned int i = 0; i < fLibraries->size(); i++)
 	{
-		//PAF_DEBUG("PAFAbstractProject", "IS here the error?");
-
 		fExecutionEnvironment->LoadLibrary(fLibraries->at(i));
-		//PAF_DEBUG("PAFAbstractProject", "maybe");
-	
 	}
 
 	if(fCompileOnSlaves)
@@ -367,7 +357,7 @@ void PAFAbstractProject::PreparePAFSelector()
 
 	if(fSelectorPackages->size() == 0)
 	{
-		PAF_FATAL("PAAbstractFProject", "No PAFSelector specified.");
+		PAF_FATAL("PAFAbstractFProject", "No PAFSelector specified.");
 	}
 	else if (fSelectorPackages->size() == 1)
 	{
@@ -378,8 +368,6 @@ void PAFAbstractProject::PreparePAFSelector()
 		std::vector<PAFISelector*>* selectors = new std::vector<PAFISelector*>();
 		for(unsigned int i = 0; i < fSelectorPackages->size(); i++)
 		{	
-		PAF_DEBUG("PAFAbstractProject", "errors...");	
-
 			selectors->push_back( 
 				CreateObject<PAFISelector*>(fSelectorPackages->at(i)->GetName()));
 		}
@@ -416,7 +404,6 @@ TList* PAFAbstractProject::Run()
 	LoadProjectItems();
 
 	// Deal with selectors
-	PAF_DEBUG("PAFAbstractProject", "MOT Compiling and uploading selectors.");	
 	PreparePAFSelector();
 
 	fExecutionEnvironment->AddInput(new PAFNamedItem("PAFSelector", fPAFSelector));

@@ -34,13 +34,13 @@ PAFPackage::~PAFPackage()
 
 void PAFPackage::PreparePackage() const
 {
-//	TString packages_dir = GetPackagesDir();
-//
-//	gSystem->MakeDirectory(packages_dir);
+	TString packages_dir = GetPackagesDir();
 
-//	TString build_command = GetPreparePackageCommand();
-//	TString response_build_command = gSystem->GetFromPipe(build_command);
-//	PAF_DEBUG("PAFPackage", response_build_command);
+	gSystem->MakeDirectory(packages_dir);
+
+	TString build_command = GetPreparePackageCommand();
+	TString response_build_command = gSystem->GetFromPipe(build_command);
+	PAF_DEBUG("PAFPackage", response_build_command);
 }
 
 TString PAFPackage::GetPreparePackageCommand() const
@@ -64,15 +64,13 @@ void PAFPackage::CompileAsLibrary() const
 {
 
 	TString compileaslibrary_command = TString::Format("%s/bin/CompileLibrary.sh -s -d %s %s 2>&1", fPAFSettings->GetPAFPATH()->Data(),  GetPackagesDir().Data(), GetName());
-	PAF_DEBUG("PAFPackage", TString::Format("Compiling %s with command %s",
+	/*PAF_DEBUG("PAFPackage", TString::Format("Compiling %s with command %s",
 						fName.Data(),
 						compileaslibrary_command.Data()
-						).Data());
+						).Data());*/
 	
 	PAF_DEBUG("PAFPackage", TString::Format("Compiling package %s...", fName.Data()).Data());
-	PAF_DEBUG("PAFPackage", "empieza");
 	TString response_compileaslibrary_command = gSystem->GetFromPipe(compileaslibrary_command);
-	PAF_DEBUG("PAFPackage", "acaba");
 	if (response_compileaslibrary_command.Index("Successful compilation") == response_compileaslibrary_command.Length() - 22)
 	{
 	        PAF_DEBUG("PAFPackage", "                  #==> compiled.");
