@@ -45,7 +45,7 @@ void PAFChainItemSelector::Summary()
 void PAFChainItemSelector::SetStaticData(TList* input, TSelectorList* output,
 					 PAFVariableContainer* selectorParams)
 {
-	fInput = input;
+	fInput = input; 
 	fOutput = output;
 	fSelectorParams = selectorParams;
 }

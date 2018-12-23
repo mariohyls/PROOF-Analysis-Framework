@@ -89,6 +89,7 @@ class PAFAbstractProject
 		T CreateObject(const char* className);
 
 		void PreparePackage(PAFPackage* package);
+		bool CheckPackages();
 		void PreparePackages();
 		void LoadProjectItems();
 		void PreparePAFSelector();

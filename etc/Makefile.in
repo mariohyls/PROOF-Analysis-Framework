@@ -46,7 +46,7 @@ ifeq ($(ARCH),aix5)
 	/usr/vacpp/bin/makeC++SharedLib $(OutPutOpt) $@ $(LIBS) -p 0 $^
 else
 ifeq ($(PLATFORM),macosx)
-# We need to make both the .dylib and the .so
+#We ned to make both the .dylib and the .so
 	$(LD) $(SOFLAGS)$@ $(LDFLAGS) $(MYLIBS) $(LIBS) $^ $(OutPutOpt) $@
 ifneq ($(subst $(MACOSX_MINOR),,1234),1234)
 ifeq ($(MACOSX_MINOR),4)

@@ -6,7 +6,7 @@
 #    DATE: 2010
 #
 # CONTENT: Makes .par files for a given package 
-#          Use MakeParFile.sh -help for more information
+#          Use MakeParFile.sh -help for more information 
 ####################################################################
 
 

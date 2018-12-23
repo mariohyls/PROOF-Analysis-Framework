@@ -67,15 +67,14 @@ myerror() {
 compilepackage() {
     myecho ">> Creating $parpackagename for package in $basepath..."
     
-    if [ ! -d $destpath/PROOF-INF -o ! -e $destpath/PROOF-INF/SETUP.C ] ; then
-	myerror "Could not find PROOF package files"
-    	myerror "$packagedir is not a PROOF package. Exiting!"
-    fi
-    
+    #if [ ! -d $destpath/PROOF-INF -o ! -e $destpath/PROOF-INF/SETUP.C ] ; then
+	#myerror "Could not find PROOF package files"
+    #	myerror "$packagedir is not a PROOF package. Exiting!"
+    #fi
     if [ -f $basepath/$parpackagename ]; then
-        if [ $silent -ne 0 ]; then
-            myecho "Moving $basepath/$parpackagename to $basepath/$parpackagename.bak"
-        fi
+        #if [ $silent -ne 0 ]; then
+        #    myecho "Moving $basepath/$parpackagename to $basepath/$parpackagename.bak"
+        #fi
         mv $basepath/$parpackagename $basepath/$parpackagename.bak
     fi
 
