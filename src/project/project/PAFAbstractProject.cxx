@@ -10,7 +10,6 @@
 #include "PAFAbstractProject.h"
 
 #include "TSystem.h"
-#include "TFile.h"
 
 #include "PAF.h"
 #include "PAFNamedItem.h"
@@ -257,11 +256,6 @@ void CreateSessionDir()
 	TString buildDir = TString::Format("%s/.paf/BuildDir",gSystem->pwd());
 	gSystem->mkdir(buildDir, true);
 	gSystem->SetBuildDir(buildDir);
-
-
-	TFile file(buildDir+"/ShouldWeCompile.conf", "NEW");
-	file.Write("Delete this file if you want PAF to compile / recompile all \
-	the Packages in this folder");
 }
 
 void PAFAbstractProject::PreparePackage(PAFPackage* package)
@@ -281,7 +275,7 @@ void PAFAbstractProject::PreparePackage(PAFPackage* package)
 bool PAFAbstractProject::CheckPackages()
 {
 	TString buildDir = TString::Format("%s/.paf/BuildDir",gSystem->pwd());
-	bool ShouldWeCompile = !gSystem->AccessPathName(buildDir+"/ShouldWeCompile.conf");
+	bool ShouldWeCompile = !gSystem->AccessPathName(buildDir+"/packages");
 
 	return ShouldWeCompile;
 }
